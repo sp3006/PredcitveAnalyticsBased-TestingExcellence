@@ -1,0 +1,218 @@
+{
+  "jobs": [
+    {
+      "job_name": "customer_daily_aggregation",
+      "description": "Daily customer transaction aggregation",
+      "schedule": "0 2 * * *",
+
+      "graph_metadata": {
+        "graph_file": "customer_daily_agg.mp",
+        "source_row_count": 5500000,
+        "avg_row_size_bytes": 2048,
+        "partition_count": 4,
+        "parallelism": 2,
+        "compression_enabled": false,
+        "components": [
+          {"type": "input", "name": "read_transactions"},
+          {"type": "sort", "name": "sort_by_customer"},
+          {"type": "join", "name": "join_customer_details"},
+          {"type": "aggregate", "name": "daily_summary"},
+          {"type": "sort", "name": "final_sort"},
+          {"type": "dedup", "name": "remove_duplicates"},
+          {"type": "output", "name": "write_results"}
+        ]
+      },
+
+      "source_config": {
+        "source_system": "teradata",
+        "database": "staging",
+        "table_name": "customer_transactions",
+        "has_primary_key": false,
+        "staging_layers": 3,
+        "incremental_load": true,
+        "historical_duplicate_rate": 0.06
+      },
+
+      "kubernetes_config": {
+        "namespace": "abinitio-prod",
+        "serviceAccountName": "abinitio-batch-sa",
+        "resources": {
+          "requests": {
+            "cpu": "2",
+            "memory": "8Gi"
+          },
+          "limits": {
+            "cpu": "4",
+            "memory": "16Gi"
+          }
+        },
+        "nodeSelector": {
+          "workload-type": "data-intensive"
+        },
+        "tolerations": [
+          {
+            "key": "data-processing",
+            "operator": "Equal",
+            "value": "true",
+            "effect": "NoSchedule"
+          }
+        ],
+        "volumes": [
+          {
+            "name": "data-volume",
+            "persistentVolumeClaim": {
+              "claimName": "efs-abinitio-data"
+            }
+          }
+        ]
+      },
+
+      "storage_config": {
+        "type": "efs",
+        "filesystem_id": "fs-0abc123def456789",
+        "mount_path": "/data",
+        "mount_options": ["nfsvers=4.1", "tls"],
+        "security_group_rules": [
+          {"protocol": "tcp", "port": 2049, "source": "sg-node-0123456789"}
+        ]
+      },
+
+      "iam_config": {
+        "required_services": ["s3", "efs", "secrets_manager"],
+        "service_account": "abinitio-batch-sa",
+        "iam_role_arn": "arn:aws:iam::123456789012:role/eks-abinitio-batch-role"
+      }
+    },
+
+    {
+      "job_name": "sales_analytics_daily",
+      "description": "Daily sales analytics and reporting",
+      "schedule": "0 4 * * *",
+
+      "graph_metadata": {
+        "graph_file": "sales_analytics.mp",
+        "source_row_count": 8500000,
+        "avg_row_size_bytes": 1536,
+        "partition_count": 8,
+        "parallelism": 4,
+        "compression_enabled": true,
+        "components": [
+          {"type": "input", "name": "read_sales"},
+          {"type": "sort", "name": "sort_by_date"},
+          {"type": "join", "name": "join_product"},
+          {"type": "join", "name": "join_customer"},
+          {"type": "aggregate", "name": "sales_summary"},
+          {"type": "aggregate", "name": "product_summary"},
+          {"type": "sort", "name": "final_sort"},
+          {"type": "output", "name": "write_analytics"}
+        ]
+      },
+
+      "source_config": {
+        "source_system": "teradata",
+        "database": "staging",
+        "table_name": "sales_transactions",
+        "has_primary_key": true,
+        "staging_layers": 2,
+        "incremental_load": true,
+        "historical_duplicate_rate": 0.03
+      },
+
+      "kubernetes_config": {
+        "namespace": "abinitio-prod",
+        "serviceAccountName": "abinitio-batch-sa",
+        "resources": {
+          "requests": {
+            "cpu": "8",
+            "memory": "32Gi"
+          },
+          "limits": {
+            "cpu": "16",
+            "memory": "64Gi"
+          }
+        },
+        "nodeSelector": {
+          "workload-type": "data-intensive"
+        },
+        "tolerations": [
+          {
+            "key": "data-processing",
+            "operator": "Equal",
+            "value": "true",
+            "effect": "NoSchedule"
+          }
+        ]
+      },
+
+      "storage_config": {
+        "type": "efs",
+        "filesystem_id": "fs-0abc123def456789",
+        "mount_path": "/data"
+      },
+
+      "iam_config": {
+        "required_services": ["s3", "efs"],
+        "service_account": "abinitio-batch-sa",
+        "iam_role_arn": "arn:aws:iam::123456789012:role/eks-abinitio-batch-role"
+      }
+    },
+
+    {
+      "job_name": "inventory_snapshot",
+      "description": "Hourly inventory snapshot",
+      "schedule": "0 * * * *",
+
+      "graph_metadata": {
+        "graph_file": "inventory_snapshot.mp",
+        "source_row_count": 2500000,
+        "avg_row_size_bytes": 1024,
+        "partition_count": 2,
+        "parallelism": 1,
+        "compression_enabled": false,
+        "components": [
+          {"type": "input", "name": "read_inventory"},
+          {"type": "sort", "name": "sort_by_product"},
+          {"type": "aggregate", "name": "calculate_totals"},
+          {"type": "output", "name": "write_snapshot"}
+        ]
+      },
+
+      "source_config": {
+        "source_system": "teradata",
+        "database": "staging",
+        "table_name": "inventory",
+        "has_primary_key": true,
+        "staging_layers": 1,
+        "incremental_load": false,
+        "historical_duplicate_rate": 0.01
+      },
+
+      "kubernetes_config": {
+        "namespace": "abinitio-prod",
+        "serviceAccountName": "abinitio-batch-sa",
+        "resources": {
+          "requests": {
+            "cpu": "1",
+            "memory": "4Gi"
+          },
+          "limits": {
+            "cpu": "2",
+            "memory": "8Gi"
+          }
+        }
+      },
+
+      "storage_config": {
+        "type": "efs",
+        "filesystem_id": "fs-0abc123def456789",
+        "mount_path": "/data"
+      },
+
+      "iam_config": {
+        "required_services": ["s3", "efs"],
+        "service_account": "abinitio-batch-sa",
+        "iam_role_arn": "arn:aws:iam::123456789012:role/eks-abinitio-batch-role"
+      }
+    }
+  ]
+}

@@ -1,0 +1,338 @@
+{
+  "job_execution_history": [
+    {
+      "job_id": "job-001",
+      "job_name": "customer_daily_aggregation",
+      "execution_date": "2025-11-28T02:00:00Z",
+      "status": "SUCCESS",
+      "duration_minutes": 45,
+      "resources_used": {
+        "peak_memory_gb": 12.5,
+        "avg_cpu_cores": 2.8,
+        "peak_cpu_cores": 3.9,
+        "storage_used_gb": 85
+      },
+      "input_data": {
+        "row_count": 4500000,
+        "size_gb": 48,
+        "duplicate_rate": 0.02,
+        "source_tables": ["staging.customer_transactions", "staging.customer_details"]
+      },
+      "output_data": {
+        "row_count": 4410000,
+        "size_gb": 12,
+        "tables": ["fact.customer_daily_summary"]
+      },
+      "graph_metadata": {
+        "num_components": 8,
+        "num_sorts": 2,
+        "num_joins": 1,
+        "num_aggregations": 1,
+        "parallelism": 2
+      },
+      "eks_pod_info": {
+        "pod_name": "customer-daily-agg-abcd1234",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-45.ec2.internal",
+        "scheduling_time_seconds": 2.5,
+        "efs_mount_time_seconds": 3.2
+      }
+    },
+    {
+      "job_id": "job-002",
+      "job_name": "customer_daily_aggregation",
+      "execution_date": "2025-11-27T02:00:00Z",
+      "status": "SUCCESS",
+      "duration_minutes": 42,
+      "resources_used": {
+        "peak_memory_gb": 11.8,
+        "avg_cpu_cores": 2.5,
+        "peak_cpu_cores": 3.6,
+        "storage_used_gb": 78
+      },
+      "input_data": {
+        "row_count": 4200000,
+        "size_gb": 45,
+        "duplicate_rate": 0.015,
+        "source_tables": ["staging.customer_transactions", "staging.customer_details"]
+      },
+      "output_data": {
+        "row_count": 4137000,
+        "size_gb": 11,
+        "tables": ["fact.customer_daily_summary"]
+      },
+      "graph_metadata": {
+        "num_components": 8,
+        "num_sorts": 2,
+        "num_joins": 1,
+        "num_aggregations": 1,
+        "parallelism": 2
+      },
+      "eks_pod_info": {
+        "pod_name": "customer-daily-agg-efgh5678",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-45.ec2.internal",
+        "scheduling_time_seconds": 1.8,
+        "efs_mount_time_seconds": 2.9
+      }
+    },
+    {
+      "job_id": "job-003",
+      "job_name": "customer_daily_aggregation",
+      "execution_date": "2025-11-26T02:00:00Z",
+      "status": "FAILED",
+      "duration_minutes": 25,
+      "failure_reason": "Pod OOMKilled - memory limit exceeded",
+      "error_details": {
+        "type": "OOMKilled",
+        "exit_code": 137,
+        "message": "Container exceeded memory limit",
+        "pod_event": "Back-off restarting failed container"
+      },
+      "resources_used": {
+        "peak_memory_gb": 16.2,
+        "avg_cpu_cores": 3.1,
+        "peak_cpu_cores": 4.0,
+        "storage_used_gb": 125
+      },
+      "input_data": {
+        "row_count": 6800000,
+        "size_gb": 72,
+        "duplicate_rate": 0.085,
+        "source_tables": ["staging.customer_transactions", "staging.customer_details"]
+      },
+      "graph_metadata": {
+        "num_components": 8,
+        "num_sorts": 2,
+        "num_joins": 1,
+        "num_aggregations": 1,
+        "parallelism": 2
+      },
+      "eks_pod_info": {
+        "pod_name": "customer-daily-agg-ijkl9012",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-45.ec2.internal",
+        "scheduling_time_seconds": 2.1,
+        "efs_mount_time_seconds": 3.5
+      }
+    },
+    {
+      "job_id": "job-004",
+      "job_name": "product_inventory_sync",
+      "execution_date": "2025-11-28T03:00:00Z",
+      "status": "FAILED",
+      "duration_minutes": 5,
+      "failure_reason": "EFS mount timeout",
+      "error_details": {
+        "type": "MountFailure",
+        "message": "Failed to mount EFS: connection timeout",
+        "pod_event": "MountVolume.SetUp failed for volume 'efs-pv'",
+        "security_group_issue": true
+      },
+      "resources_used": {
+        "peak_memory_gb": 0,
+        "avg_cpu_cores": 0,
+        "peak_cpu_cores": 0,
+        "storage_used_gb": 0
+      },
+      "input_data": {
+        "row_count": 0,
+        "size_gb": 0,
+        "duplicate_rate": 0,
+        "source_tables": ["staging.product_inventory"]
+      },
+      "graph_metadata": {
+        "num_components": 5,
+        "num_sorts": 1,
+        "num_joins": 0,
+        "num_aggregations": 1,
+        "parallelism": 1
+      },
+      "eks_pod_info": {
+        "pod_name": "product-inventory-sync-mnop3456",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-46.ec2.internal",
+        "scheduling_time_seconds": 1.5,
+        "efs_mount_time_seconds": 300
+      }
+    },
+    {
+      "job_id": "job-005",
+      "job_name": "sales_analytics_daily",
+      "execution_date": "2025-11-28T04:00:00Z",
+      "status": "FAILED",
+      "duration_minutes": 0,
+      "failure_reason": "Pod stuck in Pending - insufficient CPU",
+      "error_details": {
+        "type": "SchedulingFailure",
+        "message": "0/3 nodes are available: insufficient cpu",
+        "pod_event": "FailedScheduling"
+      },
+      "resources_used": {
+        "peak_memory_gb": 0,
+        "avg_cpu_cores": 0,
+        "peak_cpu_cores": 0,
+        "storage_used_gb": 0
+      },
+      "input_data": {
+        "row_count": 8500000,
+        "size_gb": 95,
+        "duplicate_rate": 0.03,
+        "source_tables": ["staging.sales_transactions"]
+      },
+      "graph_metadata": {
+        "num_components": 12,
+        "num_sorts": 3,
+        "num_joins": 2,
+        "num_aggregations": 2,
+        "parallelism": 4
+      },
+      "eks_pod_info": {
+        "pod_name": "sales-analytics-daily-qrst7890",
+        "namespace": "abinitio-prod",
+        "node_name": null,
+        "scheduling_time_seconds": null,
+        "efs_mount_time_seconds": null
+      },
+      "requested_resources": {
+        "cpu_request": "8",
+        "memory_request": "32Gi"
+      }
+    },
+    {
+      "job_id": "job-006",
+      "job_name": "order_reconciliation",
+      "execution_date": "2025-11-28T05:00:00Z",
+      "status": "FAILED",
+      "duration_minutes": 15,
+      "failure_reason": "S3 Access Denied - IAM permissions missing",
+      "error_details": {
+        "type": "AccessDenied",
+        "message": "An error occurred (AccessDenied) when calling the GetObject operation: Access Denied",
+        "aws_service": "S3",
+        "bucket": "abinitio-source-data",
+        "required_permission": "s3:GetObject"
+      },
+      "resources_used": {
+        "peak_memory_gb": 4.2,
+        "avg_cpu_cores": 1.2,
+        "peak_cpu_cores": 1.8,
+        "storage_used_gb": 15
+      },
+      "input_data": {
+        "row_count": 0,
+        "size_gb": 35,
+        "duplicate_rate": 0,
+        "source_tables": ["s3://abinitio-source-data/orders/"]
+      },
+      "graph_metadata": {
+        "num_components": 6,
+        "num_sorts": 1,
+        "num_joins": 1,
+        "num_aggregations": 0,
+        "parallelism": 2
+      },
+      "eks_pod_info": {
+        "pod_name": "order-reconciliation-uvwx4567",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-47.ec2.internal",
+        "scheduling_time_seconds": 2.0,
+        "efs_mount_time_seconds": 3.1,
+        "service_account": "abinitio-batch-sa",
+        "iam_role_assumed": false
+      }
+    },
+    {
+      "job_id": "job-007",
+      "job_name": "customer_daily_aggregation",
+      "execution_date": "2025-11-25T02:00:00Z",
+      "status": "SUCCESS",
+      "duration_minutes": 48,
+      "resources_used": {
+        "peak_memory_gb": 13.2,
+        "avg_cpu_cores": 2.9,
+        "peak_cpu_cores": 4.1,
+        "storage_used_gb": 92
+      },
+      "input_data": {
+        "row_count": 5100000,
+        "size_gb": 52,
+        "duplicate_rate": 0.025,
+        "source_tables": ["staging.customer_transactions", "staging.customer_details"]
+      },
+      "output_data": {
+        "row_count": 4972500,
+        "size_gb": 13,
+        "tables": ["fact.customer_daily_summary"]
+      },
+      "graph_metadata": {
+        "num_components": 8,
+        "num_sorts": 2,
+        "num_joins": 1,
+        "num_aggregations": 1,
+        "parallelism": 2
+      },
+      "eks_pod_info": {
+        "pod_name": "customer-daily-agg-yzab8901",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-45.ec2.internal",
+        "scheduling_time_seconds": 2.3,
+        "efs_mount_time_seconds": 3.0
+      }
+    },
+    {
+      "job_id": "job-008",
+      "job_name": "inventory_snapshot",
+      "execution_date": "2025-11-28T06:00:00Z",
+      "status": "SUCCESS",
+      "duration_minutes": 22,
+      "resources_used": {
+        "peak_memory_gb": 6.5,
+        "avg_cpu_cores": 1.8,
+        "peak_cpu_cores": 2.5,
+        "storage_used_gb": 42
+      },
+      "input_data": {
+        "row_count": 2500000,
+        "size_gb": 28,
+        "duplicate_rate": 0.01,
+        "source_tables": ["staging.inventory"]
+      },
+      "output_data": {
+        "row_count": 2475000,
+        "size_gb": 8,
+        "tables": ["fact.inventory_snapshot"]
+      },
+      "graph_metadata": {
+        "num_components": 5,
+        "num_sorts": 1,
+        "num_joins": 0,
+        "num_aggregations": 1,
+        "parallelism": 1
+      },
+      "eks_pod_info": {
+        "pod_name": "inventory-snapshot-cdef2345",
+        "namespace": "abinitio-prod",
+        "node_name": "ip-10-0-1-46.ec2.internal",
+        "scheduling_time_seconds": 1.6,
+        "efs_mount_time_seconds": 2.8
+      }
+    }
+  ],
+  "metadata": {
+    "collection_period": "2025-11-25 to 2025-11-28",
+    "total_executions": 8,
+    "success_count": 4,
+    "failure_count": 4,
+    "failure_rate": 0.5,
+    "common_failure_types": {
+      "OOMKilled": 1,
+      "MountFailure": 1,
+      "SchedulingFailure": 1,
+      "AccessDenied": 1
+    },
+    "average_execution_time_minutes": 31.5,
+    "cluster": "bi-abi-apps-prod",
+    "region": "us-east-1"
+  }
+}
